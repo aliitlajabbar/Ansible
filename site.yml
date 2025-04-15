@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: Install updates for Fedora
+      dnf:
+        update_cache: yes
+      when: ansible_distribution == "Fedora"
+
+    - name: Install updates for Ubuntu
+      apt:
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+- hosts: web_servers
+  become: true
+  tasks:
+    - name: Install space on web servers
+      ansible.builtin.package:
+        name: space
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+- hosts: db_servers
+  become: true
+  tasks:
+    - name: Install mariadb package on db servers
+      ansible.builtin.package:
+        name: mariadb
+        state: latest
+      when: ansible_distribution == "Fedora"
