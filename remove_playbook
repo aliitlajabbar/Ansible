@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: update repository index
+      ansible.builtin.dnf:
+        update_cache: yes
+
+    - name: remove apache2 package
+      ansible.builtin.dnf:
+        name: httpd
+        state : absent
+
+    - name: remove support for php
+      ansible.builtin.dnf:
+        name: php
+        state : absent
+
